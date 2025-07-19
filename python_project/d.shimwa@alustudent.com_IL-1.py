@@ -62,6 +62,9 @@ summative_total = 0
 FORMATIVE_MAX = 60
 SUMMATIVE_MAX = 40
 
+# Store assignments for report
+assignments = []
+
 while True:
     assignment_name = get_valid_input("Enter assignment name: ")
     assignment_category = get_assignment_category("Enter assignment category (Formative/Summative): ")
@@ -69,6 +72,15 @@ while True:
     grade = get_grade("Enter obtained grade: ")
 
     weighted_grade = (grade / 100) * weight
+
+    # Save assignment info for report
+    assignments.append({
+        "name": assignment_name,
+        "category": assignment_category,
+        "weight": weight,
+        "grade": grade,
+        "weighted_mark": weighted_grade
+    })
 
     if assignment_category == "Formative":
         if formative_total + weighted_grade > FORMATIVE_MAX:
@@ -93,11 +105,29 @@ while True:
     if more != "yes":
         break
 
-print("Final Formative Total:", formative_total)
-print("Final Summative Total:", summative_total)
+print("\n--- Final Report ---")
+print(f"Student Name: {name}")
+print(f"Cohort: {cohort}")
+print(f"Faculty: {faculty}")
+print(f"Intake: {intake}\n")
+
+print("Assignments:")
+for a in assignments:
+    print(f"  Name: {a['name']}, Category: {a['category']}, Weight: {a['weight']}, Grade: {a['grade']}, Weighted Mark: {a['weighted_mark']:.2f}")
+
+print(f"\nTotal Formative %: {formative_total:.2f} / {FORMATIVE_MAX}")
+print(f"Total Summative %: {summative_total:.2f} / {SUMMATIVE_MAX}")
 
 # Calculate GPA
 total_overall_grade = formative_total + summative_total
 gpa = (total_overall_grade / 100) * 5
-print(f"Total Overall Grade: {total_overall_grade:.2f} / 100")
 print(f"GPA: {gpa:.2f} / 5")
+
+# Pass/Fail decision
+average_formative = FORMATIVE_MAX / 2
+average_summative = SUMMATIVE_MAX / 2
+
+if formative_total >= average_formative and summative_total >= average_summative:
+    print("Result: PASS")
+else:
+    print("Result: FAIL")
