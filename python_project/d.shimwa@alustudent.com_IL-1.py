@@ -54,17 +54,45 @@ def get_grade(prompt):
         except ValueError:
             print("Grade must be a numeric value. Please try again.")
 
-# Ask for Assignment info
-assignment_name = get_valid_input("Enter assignment name: ")
-assignment_category = get_assignment_category("Enter assignment category (Formative/Summative): ")
-weight = get_weight("Enter assignment weight: ")
-grade = get_grade("Enter obtained grade: ")
+# Initialize totals
+formative_total = 0
+summative_total = 0
 
-# Display the collected information
-print(f"Assignment Name: {assignment_name}")
-print(f"Assignment Category: {assignment_category}")
-print(f"Weight: {weight}")
-print(f"Obtained Grade: {grade}")
+# Set maximums
+FORMATIVE_MAX = 60
+SUMMATIVE_MAX = 40
 
+while True:
+    assignment_name = get_valid_input("Enter assignment name: ")
+    assignment_category = get_assignment_category("Enter assignment category (Formative/Summative): ")
+    weight = get_weight("Enter assignment weight: ")
+    grade = get_grade("Enter obtained grade: ")
 
-# This script collects student and assignment information with validation
+    weighted_grade = (grade / 100) * weight
+
+    if assignment_category == "Formative":
+        if formative_total + weighted_grade > FORMATIVE_MAX:
+            print(f"Formative total cannot exceed {FORMATIVE_MAX}. Assignment not added.")
+        else:
+            formative_total += weighted_grade
+    elif assignment_category == "Summative":
+        if summative_total + weighted_grade > SUMMATIVE_MAX:
+            print(f"Summative total cannot exceed {SUMMATIVE_MAX}. Assignment not added.")
+        else:
+            summative_total += weighted_grade
+
+    print(f"Assignment Name: {assignment_name}")
+    print(f"Assignment Category: {assignment_category}")
+    print(f"Weight: {weight}")
+    print(f"Obtained Grade: {grade}")
+    print(f"Weighted Grade: {weighted_grade:.2f}")
+    print(f"Formative Total: {formative_total:.2f} / {FORMATIVE_MAX}")
+    print(f"Summative Total: {summative_total:.2f} / {SUMMATIVE_MAX}")
+
+    more = input("Do you want to add another assignment? (yes/no): ").strip().lower()
+    if more != "yes":
+        break
+
+print("Final Formative Total:", formative_total)
+print("Final Summative Total:", summative_total)
+
