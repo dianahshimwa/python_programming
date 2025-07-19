@@ -96,3 +96,8 @@ while True:
 print("Final Formative Total:", formative_total)
 print("Final Summative Total:", summative_total)
 
+# Calculate GPA
+total_overall_grade = formative_total + summative_total
+gpa = (total_overall_grade / 100) * 5
+print(f"Total Overall Grade: {total_overall_grade:.2f} / 100")
+print(f"GPA: {gpa:.2f} / 5")
